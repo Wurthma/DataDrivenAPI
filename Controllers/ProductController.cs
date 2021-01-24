@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Backoffice.Controllers
 {
-    [Route("v1/products")]
+    [Route("products")]
     public class ProductController : Controller
     {
         [HttpGet]

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DataDrivenAPI.Data;
 using DataDrivenAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public class CategoryController : ControllerBase
 {
     [HttpGet]
     [Route("")]
+    [AllowAnonymous]
     public async Task<ActionResult<List<Category>>> Get([FromServices] DataContext context)
     {
         var categories = await context.Categories.AsNoTracking().ToListAsync();
@@ -18,13 +20,20 @@ public class CategoryController : ControllerBase
 
     [HttpGet]
     [Route("{id:int}")]
-    public async Task<ActionResult<Category>> GetById(int id)
+    [AllowAnonymous]
+    public async Task<ActionResult<Category>> GetById(int id, [FromServices] DataContext context)
     {
+        var category = await context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+        if(category == null)
+            return NotFound(new { message = "Categoria não encontrada" });
+
         return new Category();
     }
 
     [HttpPost]
     [Route("")]
+    [Authorize(Roles = "employee")]
     public async Task<ActionResult<Category>> Post([FromBody]Category model, [FromServices] DataContext context)
     {
         if(!ModelState.IsValid)
@@ -45,6 +54,7 @@ public class CategoryController : ControllerBase
 
     [HttpPut]
     [Route("{id:int}")]
+    [Authorize(Roles = "employee")]
     public async Task<ActionResult<Category>> Put(int id, [FromBody] Category model, [FromServices] DataContext context)
     {
         if(id != model.Id)
@@ -71,6 +81,7 @@ public class CategoryController : ControllerBase
 
     [HttpDelete]
     [Route("")]
+    [Authorize(Roles = "employee")]
     public async Task<ActionResult<Category>> Delete(int id, [FromServices] DataContext context)
     {
         var category = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
