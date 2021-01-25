@@ -6,12 +6,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Route("categories")]
+[Route("v1/categories")]
 public class CategoryController : ControllerBase
 {
     [HttpGet]
     [Route("")]
     [AllowAnonymous]
+    // Especificando cache para controller manualmente
+    [ResponseCache(VaryByHeader = "User-Agent", Location = ResponseCacheLocation.Any, Duration = 30)]
+    // Removendo cache da controller, caso cashe esteja habilitado pra toda API (Startup.cs > services.AddResponseCaching())
+    // [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public async Task<ActionResult<List<Category>>> Get([FromServices] DataContext context)
     {
         var categories = await context.Categories.AsNoTracking().ToListAsync();
