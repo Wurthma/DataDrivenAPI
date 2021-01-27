@@ -15,3 +15,8 @@
 - `dotnet add package Microsoft.AspNetCore.Authentication`
 - `dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer`
 - `dotnet add package Swashbuckle.AspNetCore` (Adicionado por padrão no .Net 5)
+
+## Azure
+
+Realizado deploy da aplicação no azure para exemplo.
+Grupo de recurso: GeorgeEstudos
