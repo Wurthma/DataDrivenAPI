@@ -51,10 +51,10 @@ namespace DataDrivenAPI
                 };
             });
 
-            services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
-            // services.AddDbContext<DataContext>(opt => opt.UseSqlServer(
-            //     Configuration.GetConnectionString("connectionString")
-            // ));
+            //services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Database"));
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(
+                Configuration.GetConnectionString("connectionString")
+            ));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DataDrivenAPI", Version = "v1" });
